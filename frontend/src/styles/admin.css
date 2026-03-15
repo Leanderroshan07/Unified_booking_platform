@@ -1,0 +1,128 @@
+.admin-page {
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #fff;
+  background: #121212;
+  min-height: 100vh;
+}
+
+.admin-page h1 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  background: linear-gradient(45deg, #ff416c, #ff4b2b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.admin-form {
+  display: grid;
+  gap: 20px;
+  max-width: 600px;
+  background: #1e1e1e;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.file-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.file-input-group label {
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.admin-form input {
+  background: #2a2a2a;
+  border: 1px solid #333;
+  padding: 12px;
+  border-radius: 6px;
+  color: #fff;
+  transition: border-color 0.3s;
+}
+
+.admin-form input:focus {
+  border-color: #ff416c;
+  outline: none;
+}
+
+.admin-form button {
+  padding: 15px;
+  background: linear-gradient(45deg, #ff416c, #ff4b2b);
+  border: none;
+  color: white;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.admin-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 65, 108, 0.4);
+}
+
+.admin-movie-list {
+  margin-top: 60px;
+}
+
+.admin-movie-list h2 {
+  margin-bottom: 20px;
+}
+
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 30px;
+}
+
+.admin-movie-card {
+  background: #1e1e1e;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
+.admin-movie-card:hover {
+  transform: scale(1.05);
+}
+
+.admin-movie-card img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+.movie-info {
+  padding: 15px;
+}
+
+.movie-info h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.2rem;
+}
+
+.movie-info p {
+  color: #aaa;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+.delete-btn {
+  width: 100%;
+  padding: 8px;
+  background: #dc3545;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.delete-btn:hover {
+  background: #c82333;
+}

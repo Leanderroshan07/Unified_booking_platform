@@ -1,0 +1,98 @@
+import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { CheckCircle2 } from "lucide-react";
+import { formatINR } from "../../utils/currency";
+
+const HotelBookingSuccess = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const booking = location.state?.booking;
+  const hotelInfo = location.state?.hotelInfo || {};
+
+  if (!booking) {
+    return (
+      <div className="min-h-screen bg-[#0a0b10] text-white flex items-center justify-center p-6">
+        <div className="text-center space-y-4">
+          <p>Booking confirmation not found.</p>
+          <button
+            onClick={() => navigate("/hotels")}
+            className="px-6 py-3 rounded-xl bg-brand-red text-white font-bold"
+          >
+            Back To Hotels
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const checkInLabel = booking.checkInDate
+    ? new Date(`${booking.checkInDate}T00:00:00`).toLocaleDateString("en-IN", {
+        weekday: "long",
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      })
+    : "";
+
+  return (
+    <div className="min-h-screen bg-[#0a0b10] text-white flex items-center justify-center p-6">
+      <div className="w-full max-w-3xl rounded-3xl border border-white/10 bg-white/5 p-8 md:p-10">
+        <div className="flex items-center gap-3 text-green-400 mb-4">
+          <CheckCircle2 size={30} />
+          <h1 className="text-2xl md:text-3xl font-black">Reservation Confirmed</h1>
+        </div>
+
+        <p className="text-neutral-400 mb-8">
+          Your hotel booking is confirmed. Details are below.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <div className="bg-black/30 border border-white/10 rounded-2xl p-4">
+            <p className="text-[10px] uppercase tracking-wider text-neutral-500 font-bold">Hotel</p>
+            <p className="text-sm font-bold mt-1">{booking.hotel?.name || hotelInfo.name || "Hotel"}</p>
+            <p className="text-xs text-neutral-400 mt-1">{booking.hotel?.location || hotelInfo.location || ""}</p>
+          </div>
+          <div className="bg-black/30 border border-white/10 rounded-2xl p-4">
+            <p className="text-[10px] uppercase tracking-wider text-neutral-500 font-bold">Booking ID</p>
+            <p className="text-sm font-bold mt-1">{booking._id}</p>
+          </div>
+          <div className="bg-black/30 border border-white/10 rounded-2xl p-4">
+            <p className="text-[10px] uppercase tracking-wider text-neutral-500 font-bold">Room</p>
+            <p className="text-sm font-bold mt-1">{booking.roomType}</p>
+          </div>
+          <div className="bg-black/30 border border-white/10 rounded-2xl p-4">
+            <p className="text-[10px] uppercase tracking-wider text-neutral-500 font-bold">Check-in</p>
+            <p className="text-sm font-bold mt-1">{checkInLabel}</p>
+          </div>
+          <div className="bg-black/30 border border-white/10 rounded-2xl p-4">
+            <p className="text-[10px] uppercase tracking-wider text-neutral-500 font-bold">Stay</p>
+            <p className="text-sm font-bold mt-1">
+              {booking.nights} night{booking.nights > 1 ? "s" : ""}
+            </p>
+          </div>
+          <div className="bg-black/30 border border-white/10 rounded-2xl p-4">
+            <p className="text-[10px] uppercase tracking-wider text-neutral-500 font-bold">Total Paid</p>
+            <p className="text-sm font-bold mt-1 text-green-400">{formatINR(booking.totalPrice)}</p>
+          </div>
+        </div>
+
+        <div className="flex flex-col md:flex-row gap-3">
+          <button
+            onClick={() => navigate("/hotels")}
+            className="flex-1 py-3 rounded-xl bg-brand-red text-white font-bold"
+          >
+            Book Another Stay
+          </button>
+          <button
+            onClick={() => navigate("/dashboard")}
+            className="flex-1 py-3 rounded-xl border border-white/20 text-neutral-300 font-bold hover:text-white hover:border-white/40 transition-colors"
+          >
+            Go To Dashboard
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default HotelBookingSuccess;

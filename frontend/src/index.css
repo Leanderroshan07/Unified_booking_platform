@@ -1,0 +1,184 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --color-brand-red: #ff2a2a;
+  --color-dark-bg: #030816;
+  --color-luxury-blue: #0a1128;
+  --color-glass: rgba(255, 255, 255, 0.05);
+  --color-glass-border: rgba(255, 255, 255, 0.1);
+  --color-accent-blue: #00d2ff;
+}
+
+:root {
+  background-color: var(--color-dark-bg);
+  color: white;
+  font-family: var(--font-sans);
+  scroll-behavior: smooth;
+
+  /* GooeyNav particle colors */
+  --color-1: #ff2a2a;
+  --color-2: #00d2ff;
+  --color-3: #ff6b6b;
+  --color-4: #a78bfa;
+}
+
+body {
+  @apply overflow-x-hidden bg-[#030816];
+  margin: 0;
+  padding: 0;
+}
+
+/* Glassmorphism Utilities */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-nav {
+  background: rgba(3, 8, 22, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(0, 210, 255, 0.3);
+  transform: translateY(-8px);
+  box-shadow: 0 10px 30px -10px rgba(0, 210, 255, 0.2);
+}
+
+/* Animations */
+@keyframes float {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(20px, 30px);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.animate-float {
+  animation: float 10s infinite ease-in-out;
+}
+
+@keyframes dreamPulse {
+  0%,
+  100% {
+    text-shadow: 0 0 16px rgba(139, 233, 255, 0.35), 0 0 34px rgba(139, 233, 255, 0.18);
+    filter: brightness(1);
+  }
+
+  50% {
+    text-shadow: 0 0 22px rgba(139, 233, 255, 0.55), 0 0 44px rgba(139, 233, 255, 0.24);
+    filter: brightness(1.08);
+  }
+}
+
+@keyframes aircraftFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, -14px, 0);
+  }
+}
+
+@keyframes aircraftGlow {
+  0%,
+  100% {
+    opacity: 0.48;
+    transform: scale(0.95);
+  }
+
+  50% {
+    opacity: 0.9;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes cardFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.flight-dream-glow {
+  animation: dreamPulse 3.4s ease-in-out infinite;
+  text-shadow: 0 0 18px rgba(139, 233, 255, 0.4);
+}
+
+.flight-aircraft-wrap {
+  animation: aircraftFloat 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+.flight-aircraft-glow {
+  animation: aircraftGlow 4.5s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.flight-card-float {
+  animation: cardFloat 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+.flight-scroll-track {
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.flight-scroll-track::-webkit-scrollbar {
+  display: none;
+}
+
+.glow-text {
+  text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+}
+
+.glow-btn:hover {
+  box-shadow: 0 0 20px rgba(0, 210, 255, 0.5);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #030816;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}

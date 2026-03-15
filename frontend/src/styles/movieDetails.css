@@ -1,0 +1,94 @@
+.movie-details-container {
+  color: white;
+  min-height: 100vh;
+  background: #111;
+}
+
+.movie-hero {
+  height: 80vh;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.overlay {
+  background: linear-gradient(to right, #000 30%, rgba(0, 0, 0, 0.4));
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.movie-content {
+  display: flex;
+  gap: 40px;
+  padding: 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.movie-poster {
+  width: 300px;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+  object-fit: cover;
+}
+
+.movie-info h1 {
+  font-size: 3.5rem;
+  margin-bottom: 10px;
+}
+
+.movie-info h1 span {
+  font-weight: 300;
+  color: #ccc;
+}
+
+.meta {
+  font-size: 1.2rem;
+  color: #ff416c;
+  margin-bottom: 20px;
+}
+
+.movie-info h3 {
+  margin-top: 30px;
+  color: #ff416c;
+  font-size: 1.4rem;
+}
+
+.cast {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.cast li {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 5px 15px;
+  border-radius: 20px;
+}
+
+/* Trailer Section */
+.trailer-section {
+  max-width: 1000px;
+  margin: 60px auto;
+  padding: 0 40px;
+}
+
+.trailer-section h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #ff416c;
+}
+
+.video-container {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  background: #000;
+}
+
+video {
+  display: block;
+}

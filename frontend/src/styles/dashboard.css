@@ -1,0 +1,134 @@
+/* HERO */
+.dashboard-hero {
+  height: 70vh;
+  background-size: cover;
+  background-position: center;
+  padding: 60px;
+  color: white;
+
+  display: flex;
+  align-items: center;
+}
+
+/* HERO CONTENT */
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  max-width: 900px;
+}
+
+/* GLOBAL SEARCH */
+.global-search {
+  display: flex;
+  background: white;
+  border-radius: 40px;
+  overflow: hidden;
+  max-width: 700px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.global-search input {
+  flex: 1;
+  padding: 18px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
+
+.global-search button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 0 35px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.global-search button:hover {
+  background: #1e40af;
+}
+
+/* CATEGORY ICONS */
+.category-icons {
+  display: flex;
+  gap: 30px;
+  background: white;
+  padding: 10px 40px;
+  border-radius: 20px;
+  width: fit-content;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* ICON CARD */
+.icon-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.icon-card:hover {
+  transform: translateY(-4px);
+}
+
+/* ICON IMAGE */
+.icon-card img {
+  width: 45px;
+  margin-bottom: 8px;
+}
+
+/* ICON TEXT */
+.icon-card span {
+  color: #333;
+  font-weight: 500;
+}
+/* ACTIVE TAB */
+.icon-card.active span {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.icon-card.active {
+  position: relative;
+}
+
+.icon-card.active::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  width: 100%;
+  height: 3px;
+  background: #2563eb;
+  border-radius: 2px;
+}
+
+/* BOOKING FORM */
+.booking-form {
+  display: flex;
+  gap: 12px;
+  background: white;
+  padding: 18px;
+  border-radius: 18px;
+  width: fit-content;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.booking-form input {
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  outline: none;
+}
+
+.booking-form button {
+  background: #ff7a00;
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
