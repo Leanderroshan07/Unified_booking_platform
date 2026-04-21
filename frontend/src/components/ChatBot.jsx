@@ -500,100 +500,90 @@ export default function ChatBot() {
         )}
       </AnimatePresence>
 
-      {/* Toggle Button - Pyramid Loader */}
+      {/* Toggle Button - Enhanced Pyramid Loader */}
       <style>{`
-        .pyramid-loader {
+        .pyramid-button {
           position: relative;
-          width: 60px;
-          height: 60px;
-          display: block;
-          transform-style: preserve-3d;
-          transform: rotateX(-20deg);
+          width: 70px;
+          height: 70px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: linear-gradient(135deg, #2BDEAC 0%, #F028FD 50%, #2F2585 100%);
+          box-shadow: 0 0 30px rgba(43, 222, 172, 0.6), 0 0 60px rgba(240, 40, 253, 0.4);
+          cursor: pointer;
+          border: 2px solid rgba(255, 255, 255, 0.2);
+          animation: pyramidGlow 2s ease-in-out infinite;
         }
 
-        .pyramid-wrapper {
-          position: relative;
-          width: 100%;
-          height: 100%;
-          transform-style: preserve-3d;
-          animation: spin 4s linear infinite;
-        }
-
-        @keyframes spin {
-          100% {
-            transform: rotateY(360deg);
+        @keyframes pyramidGlow {
+          0%, 100% {
+            box-shadow: 0 0 30px rgba(43, 222, 172, 0.6), 0 0 60px rgba(240, 40, 253, 0.4);
+            transform: scale(1);
+          }
+          50% {
+            box-shadow: 0 0 50px rgba(43, 222, 172, 0.8), 0 0 80px rgba(240, 40, 253, 0.6);
+            transform: scale(1.05);
           }
         }
 
-        .pyramid-loader .pyramid-wrapper .side {
-          width: 14px;
-          height: 14px;
+        .pyramid-button::before {
+          content: '';
           position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          margin: auto;
-          transform-origin: center top;
-          clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+          inset: 0;
+          border-radius: 50%;
+          background: conic-gradient(from 0deg, #2BDEAC, #F028FD, #D8CCE6, #2F2585, #2BDEAC);
+          animation: spin 4s linear infinite;
+          opacity: 0.7;
+          filter: blur(1px);
         }
 
-        .pyramid-loader .pyramid-wrapper .side1 {
-          transform: rotateZ(-30deg) rotateY(90deg);
-          background: conic-gradient(#2BDEAC, #F028FD, #D8CCE6, #2F2585);
-        }
-
-        .pyramid-loader .pyramid-wrapper .side2 {
-          transform: rotateZ(30deg) rotateY(90deg);
-          background: conic-gradient(#2F2585, #D8CCE6, #F028FD, #2BDEAC);
-        }
-
-        .pyramid-loader .pyramid-wrapper .side3 {
-          transform: rotateX(30deg);
-          background: conic-gradient(#2F2585, #D8CCE6, #F028FD, #2BDEAC);
-        }
-
-        .pyramid-loader .pyramid-wrapper .side4 {
-          transform: rotateX(-30deg);
-          background: conic-gradient(#2BDEAC, #F028FD, #D8CCE6, #2F2585);
-        }
-
-        .pyramid-loader .pyramid-wrapper .shadow {
-          width: 12px;
-          height: 12px;
-          background: #8B5AD5;
+        .pyramid-button::after {
+          content: '';
           position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          margin: auto;
-          transform: rotateX(90deg) translateZ(-8px);
-          filter: blur(12px);
+          inset: 4px;
+          border-radius: 50%;
+          background: rgba(15, 23, 42, 0.95);
+          backdrop-filter: blur(10px);
+          z-index: 2;
+        }
+
+        @keyframes spin {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+
+        .pyramid-button-content {
+          position: relative;
+          z-index: 3;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 28px;
+          font-weight: bold;
+          background: linear-gradient(135deg, #2BDEAC, #F028FD);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
         }
       `}</style>
 
       <motion.button
-        whileHover={{ scale: 1.1 }}
+        whileHover={{ scale: 1.15 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="shadow-2xl transition-all focus:outline-none"
+        className="pyramid-button focus:outline-none"
       >
-        {isOpen ? (
-          <div className="w-14 h-14 rounded-full flex items-center justify-center bg-white text-black shadow-2xl">
-            <X size={24} />
-          </div>
-        ) : (
-          <div className="pyramid-loader">
-            <div className="pyramid-wrapper">
-              <div className="side side1" />
-              <div className="side side2" />
-              <div className="side side3" />
-              <div className="side side4" />
-              <div className="shadow" />
-            </div>
-          </div>
-        )}
+        <div className="pyramid-button-content">
+          {isOpen ? "✕" : "⬆"}
+        </div>
       </motion.button>
     </div>
   );
