@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { getMovieById } from "../../services/movieService";
 import { getOptimizedImageUrl, getTrailerSource } from "../../utils/media";
 import "../../styles/movieDetails.css";
+import fallbackMovieImage from "../../assets/movie.jpg";
 
 const MovieDetails = () => {
   const { id } = useParams();
@@ -15,8 +16,11 @@ const MovieDetails = () => {
 
   if (!movie) return <p style={{ color: "white" }}>Loading...</p>;
 
-  const heroBackground = getOptimizedImageUrl(movie.backgroundImage, { width: 1600 });
-  const posterImage = getOptimizedImageUrl(movie.poster, { width: 720 });
+  const backgroundSource =
+    movie.backgroundImage || movie.background || movie.backdrop || movie.poster;
+  const heroBackground =
+    getOptimizedImageUrl(backgroundSource, { width: 1600 }) || fallbackMovieImage;
+  const posterImage = getOptimizedImageUrl(movie.poster, { width: 720 }) || heroBackground;
   const trailer = getTrailerSource(movie.trailerUrl);
 
   return (
