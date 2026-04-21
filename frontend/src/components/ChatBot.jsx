@@ -500,7 +500,7 @@ export default function ChatBot() {
         )}
       </AnimatePresence>
 
-      {/* Toggle Button - Enhanced Pyramid Loader */}
+      {/* Toggle Button - Pyramid Icon */}
       <style>{`
         .pyramid-button {
           position: relative;
@@ -558,20 +558,61 @@ export default function ChatBot() {
           }
         }
 
-        .pyramid-button-content {
+        .pyramid-icon {
           position: relative;
           z-index: 3;
+          width: 40px;
+          height: 40px;
+        }
+
+        .pyramid-shape {
           width: 100%;
           height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 28px;
-          font-weight: bold;
+          position: relative;
+        }
+
+        .pyramid-face {
+          position: absolute;
+          clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+
+        .pyramid-front {
+          width: 30px;
+          height: 30px;
+          top: 5px;
+          left: 5px;
           background: linear-gradient(135deg, #2BDEAC, #F028FD);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+          transform: perspective(600px) rotateX(15deg);
+        }
+
+        .pyramid-left {
+          width: 20px;
+          height: 28px;
+          top: 10px;
+          left: 2px;
+          background: linear-gradient(135deg, #D8CCE6, #2BDEAC);
+          opacity: 0.7;
+          transform: perspective(600px) rotateY(35deg) rotateX(10deg);
+        }
+
+        .pyramid-right {
+          width: 20px;
+          height: 28px;
+          top: 10px;
+          right: 2px;
+          background: linear-gradient(135deg, #F028FD, #D8CCE6);
+          opacity: 0.6;
+          transform: perspective(600px) rotateY(-35deg) rotateX(10deg);
+        }
+
+        .pyramid-base {
+          position: absolute;
+          bottom: 8px;
+          left: 5px;
+          width: 30px;
+          height: 2px;
+          background: linear-gradient(90deg, #2BDEAC, #F028FD, #2F2585);
+          opacity: 0.8;
         }
       `}</style>
 
@@ -581,8 +622,17 @@ export default function ChatBot() {
         onClick={() => setIsOpen(!isOpen)}
         className="pyramid-button focus:outline-none"
       >
-        <div className="pyramid-button-content">
-          {isOpen ? "✕" : "⬆"}
+        <div className="pyramid-icon">
+          {isOpen ? (
+            <div style={{ fontSize: "24px", fontWeight: "bold", color: "white", textShadow: "0 0 20px rgba(43, 222, 172, 0.8)" }}>✕</div>
+          ) : (
+            <div className="pyramid-shape">
+              <div className="pyramid-face pyramid-front" />
+              <div className="pyramid-face pyramid-left" />
+              <div className="pyramid-face pyramid-right" />
+              <div className="pyramid-base" />
+            </div>
+          )}
         </div>
       </motion.button>
     </div>
