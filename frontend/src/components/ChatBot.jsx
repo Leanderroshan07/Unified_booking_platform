@@ -500,15 +500,100 @@ export default function ChatBot() {
         )}
       </AnimatePresence>
 
-      {/* Toggle Button */}
+      {/* Toggle Button - Pyramid Loader */}
+      <style>{`
+        .pyramid-loader {
+          position: relative;
+          width: 60px;
+          height: 60px;
+          display: block;
+          transform-style: preserve-3d;
+          transform: rotateX(-20deg);
+        }
+
+        .pyramid-wrapper {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          transform-style: preserve-3d;
+          animation: spin 4s linear infinite;
+        }
+
+        @keyframes spin {
+          100% {
+            transform: rotateY(360deg);
+          }
+        }
+
+        .pyramid-loader .pyramid-wrapper .side {
+          width: 14px;
+          height: 14px;
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          margin: auto;
+          transform-origin: center top;
+          clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+
+        .pyramid-loader .pyramid-wrapper .side1 {
+          transform: rotateZ(-30deg) rotateY(90deg);
+          background: conic-gradient(#2BDEAC, #F028FD, #D8CCE6, #2F2585);
+        }
+
+        .pyramid-loader .pyramid-wrapper .side2 {
+          transform: rotateZ(30deg) rotateY(90deg);
+          background: conic-gradient(#2F2585, #D8CCE6, #F028FD, #2BDEAC);
+        }
+
+        .pyramid-loader .pyramid-wrapper .side3 {
+          transform: rotateX(30deg);
+          background: conic-gradient(#2F2585, #D8CCE6, #F028FD, #2BDEAC);
+        }
+
+        .pyramid-loader .pyramid-wrapper .side4 {
+          transform: rotateX(-30deg);
+          background: conic-gradient(#2BDEAC, #F028FD, #D8CCE6, #2F2585);
+        }
+
+        .pyramid-loader .pyramid-wrapper .shadow {
+          width: 12px;
+          height: 12px;
+          background: #8B5AD5;
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          margin: auto;
+          transform: rotateX(90deg) translateZ(-8px);
+          filter: blur(12px);
+        }
+      `}</style>
+
       <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all ${isOpen ? "bg-white text-black" : "bg-red-600 text-white"
-          }`}
+        className="shadow-2xl transition-all focus:outline-none"
       >
-        {isOpen ? <X size={24} /> : <MessageSquare size={24} />}
+        {isOpen ? (
+          <div className="w-14 h-14 rounded-full flex items-center justify-center bg-white text-black shadow-2xl">
+            <X size={24} />
+          </div>
+        ) : (
+          <div className="pyramid-loader">
+            <div className="pyramid-wrapper">
+              <div className="side side1" />
+              <div className="side side2" />
+              <div className="side side3" />
+              <div className="side side4" />
+              <div className="shadow" />
+            </div>
+          </div>
+        )}
       </motion.button>
     </div>
   );
