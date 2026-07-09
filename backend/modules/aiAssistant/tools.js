@@ -850,6 +850,7 @@ const getTransportOptions = async ({ origin, destination, type, limit = 5 } = {}
           distanceScore: toNum(f.distanceScore, 5),
           travelTime: f.travelTime || "",
           tags: normalizeTags(f.tags, f.aircraft),
+          seatsAvailable: f.seatsAvailable || 0,
           distanceKm: routeDistance,
           routeMeta: routeMatrix
             ? {

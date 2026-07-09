@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AIAssistantProvider } from "./contexts/AIAssistantContext";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Dashboard from "./pages/dashboard/Dashboard";
@@ -27,10 +28,12 @@ import AdminTrains from "./pages/admin/AdminTrains";
 import TrainDetails from "./pages/trains/TrainDetails";
 import TrainPayment from "./pages/trains/TrainPayment";
 import TrainBookingSuccess from "./pages/trains/TrainBookingSuccess";
+import AIAssistantWidget from "./components/dashboard/AIAssistantWidget";
 
 function App() {
   return (
-    <BrowserRouter>
+    <AIAssistantProvider>
+      <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/hotels" element={<LandingPage />} />
@@ -255,7 +258,9 @@ function App() {
           }
         />
       </Routes>
+      <AIAssistantWidget />
     </BrowserRouter>
+    </AIAssistantProvider>
   );
 }
 

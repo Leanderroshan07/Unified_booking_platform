@@ -1,9 +1,13 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Bot, Loader2, Mic, MicOff, Send, Volume2, VolumeX, X, Smile, Heart, Wind, Compass, Moon } from "lucide-react";
+import { Mic, MicOff, Volume2, VolumeX, X, Smile, Heart, Wind, Compass, Moon, Bot } from "lucide-react";
 import { queryAIAssistant } from "../../services/aiAssistantService";
 import { formatINR } from "../../utils/currency";
+import { AIAssistantContext } from "../../contexts/AIAssistantContext";
+import PyramidLoader from "./PyramidLoader";
+import GenerateButton from "./GenerateButton";
+import StyledSubmitButton from "./StyledSubmitButton";
 
 const MOOD_THEMES = {
   happy: {
@@ -80,21 +84,24 @@ const MOOD_THEMES = {
 
 const DEFAULT_ACCENT = "#00d2ff";
 
-const starterMessage = {
-  id: "starter",
-  sender: "ai",
-  text: "Hi! 👋 Tell me where you want to go and what you'd like to do. I'll find great options for you.",
-  payload: null,
-};
-
 export default function AIAssistantWidget() {
-  const [isOpen, setIsOpen] = useState(false);
+  const aiContext = useContext(AIAssistantContext);
+  const {
+    messages,
+    setMessages,
+    lastDetectedContext,
+    setLastDetectedContext,
+    detectedMood,
+    setDetectedMood,
+    geminiStatus,
+    setGeminiStatus,
+    isWidgetOpen,
+    setIsWidgetOpen,
+  } = aiContext;
+
+  const [isOpen, setIsOpen] = useState(isWidgetOpen);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [messages, setMessages] = useState([starterMessage]);
-  const [lastDetectedContext, setLastDetectedContext] = useState(null);
-  const [geminiStatus, setGeminiStatus] = useState("unknown");
-  const [detectedMood, setDetectedMood] = useState(null);
   const [supportsVoiceInput, setSupportsVoiceInput] = useState(false);
   const [supportsVoiceOutput, setSupportsVoiceOutput] = useState(false);
   const [isListening, setIsListening] = useState(false);
@@ -376,6 +383,11 @@ export default function AIAssistantWidget() {
     }
   }, [messages, isLoading]);
 
+  // Sync widget open state with context
+  useEffect(() => {
+    setIsWidgetOpen(isOpen);
+  }, [isOpen, setIsWidgetOpen]);
+
   useEffect(() => {
     const SpeechRecognition = getSpeechRecognitionConstructor();
     setSupportsVoiceInput(Boolean(SpeechRecognition));
@@ -455,7 +467,20 @@ export default function AIAssistantWidget() {
     }
 
     try {
-      const response = await queryAIAssistant(message, lastDetectedContext);
+      // Build enhanced context with conversation history
+      const conversationHistory = messages
+        .filter((m) => m.sender === "user")
+        .slice(-5) // Last 5 user messages for context
+        .map((m) => m.text);
+
+      const enhancedContext = {
+        ...lastDetectedContext,
+        conversationHistory,
+        messageCount: messages.length,
+        currentMood: detectedMood,
+      };
+
+      const response = await queryAIAssistant(message, enhancedContext);
 
       setGeminiStatus(resolveGeminiStatus(response));
 
@@ -501,14 +526,19 @@ export default function AIAssistantWidget() {
   };
 
   return (
-    <div className="fixed right-6 bottom-6 z-50">
-      <AnimatePresence>
+    <motion.div
+      className="fixed right-6 bottom-6 z-50"
+      initial={{ opacity: 0, scale: 0.8, y: 20 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ duration: 0.5, type: "spring", stiffness: 300, damping: 30 }}
+    >
+      <AnimatePresence mode="wait">
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.3, type: "spring", stiffness: 300 }}
             style={detectedMood && MOOD_THEMES[detectedMood] ? { borderColor: `${MOOD_THEMES[detectedMood].accent}30` } : {}}
             className="mb-4 w-[min(98vw,60rem)] h-[min(90vh,52rem)] rounded-3xl border border-[#00d2ff]/20 bg-gradient-to-br from-[#0a1f2e] to-[#051320] backdrop-blur-lg shadow-2xl flex flex-col overflow-hidden"
           >
@@ -632,82 +662,178 @@ export default function AIAssistantWidget() {
             </AnimatePresence>
 
             {/* Chat Area */}
-            <div ref={scrollRef} className="flex-1 overflow-y-auto px-6 py-6 space-y-4">
-              {messages.map((msg) => (
-                <div
+            <div ref={scrollRef} className="flex-1 overflow-y-auto px-6 py-6 space-y-4 scroll-smooth">
+              {messages.map((msg, idx) => (
+                <motion.div
                   key={msg.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: idx * 0.05 }}
                   className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
                 >
-                  <div
-                    className={`max-w-[80%] rounded-xl px-4 py-3 text-base ${
+                  <motion.div
+                    whileHover={msg.sender === "ai" ? { scale: 1.02, translateX: -5 } : { scale: 1.02, translateX: 5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    className={`max-w-[80%] rounded-2xl px-4 py-3 text-base backdrop-blur-sm transition-all ${
                       msg.sender === "user"
-                        ? "bg-[#00d2ff] text-[#051320] font-medium"
-                        : "bg-white/8 text-white border border-white/10"
+                        ? "bg-gradient-to-br from-[#00d2ff] to-[#0099cc] text-[#051320] font-medium shadow-lg shadow-[#00d2ff]/20"
+                        : "bg-gradient-to-br from-white/15 to-white/8 text-white border border-white/20 shadow-lg shadow-white/5"
                     }`}
                   >
-                    <p>{msg.text}</p>
+                    <p className="leading-relaxed">{msg.text}</p>
                     {msg.sender === "ai" && supportsVoiceOutput && (
-                      <button
+                      <motion.button
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                        whileHover={{ scale: 1.05 }}
                         type="button"
                         onClick={() => speakText(msg.text)}
-                        className="mt-2 inline-flex items-center gap-1 text-xs text-[#8fd4e6] hover:text-white"
+                        className="mt-2 inline-flex items-center gap-1 text-xs text-[#8fd4e6] hover:text-white hover:bg-white/10 px-2 py-1 rounded-lg transition"
                         title="Read this response"
                       >
                         <Volume2 size={14} />
                         Listen
-                      </button>
+                      </motion.button>
                     )}
-                  </div>
-                </div>
+                  </motion.div>
+                </motion.div>
               ))}
 
               {isLoading && (
-                <div className="flex justify-start">
-                  <div className="rounded-xl px-4 py-3 bg-white/8 text-white/80 text-base inline-flex items-center gap-2 border border-white/10">
-                    <Loader2 size={16} className="animate-spin text-[#00d2ff]" />
-                    <span>Searching...</span>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex justify-start"
+                >
+                  <div className="rounded-2xl px-4 py-3 bg-gradient-to-br from-white/15 to-white/8 text-white/80 text-base inline-flex items-center gap-2 border border-white/20 shadow-lg shadow-white/5">
+                    <PyramidLoader />
+                    <span className="text-sm">Finding great options...</span>
                   </div>
-                </div>
+                </motion.div>
               )}
 
-              {/* Recommendations - Large Cards */}
-              {messages
-                .filter((m) => m.sender === "ai" && m.payload)
-                .slice(-1)
-                .map((msg) =>
-                  Array.isArray(msg.payload?.recommendations) && msg.payload.recommendations.length > 0 ? (
-                    <div key={`recs-${msg.id}`} className="bg-white/5 rounded-2xl p-5 border border-white/10 mt-4">
-                      <p className="text-xs uppercase tracking-widest text-[#8fd4e6] font-bold mb-4">🏆 Top Picks</p>
-                      <div className="space-y-3">
-                        {msg.payload.recommendations.slice(0, 4).map((item, idx) => (
-                          <button
-                            key={`${item._id || idx}`}
-                            type="button"
-                            onClick={() => openRecommendation(item)}
-                            className="w-full text-left bg-white/5 p-4 rounded-xl border border-white/5 hover:border-[#00d2ff]/30 transition cursor-pointer"
-                          >
-                            <div className="flex items-start justify-between gap-4">
-                              <div className="flex-1">
-                                <p className="text-xs uppercase text-[#00d2ff] font-semibold tracking-wide">{String(item._type || "option").replace(/_/g, " ")}</p>
-                                <p className="text-lg font-bold text-white mt-2">{item.name || item.title}</p>
-                                <p className="text-sm text-slate-300 mt-1">{item.location || "Location pending"}</p>
+              {/* Recommendations - Enhanced Cards with Animations */}
+              <AnimatePresence>
+                {messages
+                  .filter((m) => m.sender === "ai" && m.payload)
+                  .slice(-1)
+                  .map((msg) =>
+                    Array.isArray(msg.payload?.recommendations) && msg.payload.recommendations.length > 0 ? (
+                      <motion.div
+                        key={`recs-${msg.id}`}
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -15 }}
+                        transition={{ duration: 0.4, ease: "easeOut" }}
+                        className="bg-gradient-to-b from-white/8 to-white/4 rounded-2xl p-5 border border-white/15 mt-4 backdrop-blur-sm"
+                      >
+                        <motion.p
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.1 }}
+                          className="text-xs uppercase tracking-widest text-[#8fd4e6] font-bold mb-4 flex items-center gap-2"
+                        >
+                          <span className="text-lg">🏆</span> Top Picks
+                        </motion.p>
+                        <div className="space-y-3">
+                          {msg.payload.recommendations.slice(0, 4).map((item, idx) => (
+                            <motion.button
+                              key={`${item._id || idx}`}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: 0.05 + idx * 0.08, duration: 0.3 }}
+                              whileHover={{ scale: 1.02, translateX: 5 }}
+                              type="button"
+                              onClick={() => openRecommendation(item)}
+                              className="w-full text-left bg-gradient-to-r from-white/8 to-white/4 p-4 rounded-xl border border-white/10 hover:border-[#00d2ff]/50 hover:bg-gradient-to-r hover:from-white/15 hover:to-white/8 transition-all duration-300 cursor-pointer group"
+                            >
+                              <div className="flex items-start justify-between gap-4">
+                                <div className="flex-1">
+                                  <motion.p
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.1 + idx * 0.08 }}
+                                    className="text-xs uppercase text-[#00d2ff] font-semibold tracking-wide group-hover:text-[#67e8f9] transition"
+                                  >
+                                    {String(item._type || "option").replace(/_/g, " ")}
+                                  </motion.p>
+                                  <motion.p
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.12 + idx * 0.08 }}
+                                    className="text-lg font-bold text-white mt-2 group-hover:text-[#00d2ff] transition"
+                                  >
+                                    {item.name || item.title}
+                                  </motion.p>
+                                  <motion.p
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.14 + idx * 0.08 }}
+                                    className="text-sm text-slate-300 mt-1 group-hover:text-white transition"
+                                  >
+                                    📍 {item.location || "Location pending"}
+                                  </motion.p>
+                                </div>
+                                <motion.div
+                                  initial={{ opacity: 0, scale: 0.8 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  transition={{ delay: 0.15 + idx * 0.08 }}
+                                  className="text-right"
+                                >
+                                  <p className="text-xs text-slate-400 uppercase tracking-wide">Rating</p>
+                                  <div className="text-2xl font-bold text-[#00d2ff] mt-1 flex items-center gap-1">
+                                    {(item.score ?? 0).toFixed(1)}
+                                    <span className="text-lg">⭐</span>
+                                  </div>
+                                </motion.div>
                               </div>
-                              <div className="text-right">
-                                <p className="text-xs text-slate-400 uppercase tracking-wide">Rating</p>
-                                <p className="text-2xl font-bold text-[#00d2ff]">{(item.score ?? 0).toFixed(1)}</p>
+                              <div className="flex items-center justify-between mt-4 text-sm text-slate-300 border-t border-white/5 pt-3">
+                                <motion.span
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                  transition={{ delay: 0.16 + idx * 0.08 }}
+                                  className="font-semibold text-[#FFD166] group-hover:text-white transition"
+                                >
+                                  💰 {item.price ? formatINR(item.price) : "Price TBA"}
+                                </motion.span>
+                                <motion.span
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                  transition={{ delay: 0.17 + idx * 0.08 }}
+                                  className="text-[#00d2ff] group-hover:text-[#67e8f9] transition"
+                                >
+                                  📏 {item.distanceKm ? `${item.distanceKm} km` : "Distance TBA"}
+                                </motion.span>
                               </div>
-                            </div>
-                            <div className="flex items-center justify-between mt-3 text-sm text-slate-300 border-t border-white/5 pt-3">
-                              <span className="font-semibold">{item.price ? formatINR(item.price) : "Price TBA"}</span>
-                              <span className="text-[#00d2ff]">{item.distanceKm ? `${item.distanceKm} km` : "Distance TBA"}</span>
-                            </div>
-                            <p className="mt-2 text-xs text-[#8fd4e6]">Click to open</p>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  ) : null
-                )}
+                              {item.seatsAvailable !== undefined && ["bus", "train", "flight"].includes(item._type) && (
+                                <motion.div
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                  transition={{ delay: 0.18 + idx * 0.08 }}
+                                  className="mt-3 text-xs text-slate-400 border-t border-white/5 pt-3 flex items-center justify-between"
+                                >
+                                  <span>🪑 Seats Available:</span>
+                                  <span className={`font-semibold ${item.seatsAvailable > 20 ? "text-emerald-400" : item.seatsAvailable > 5 ? "text-yellow-400" : "text-rose-400"}`}>
+                                    {item.seatsAvailable} seats
+                                  </span>
+                                </motion.div>
+                              )}
+                              <motion.p
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.18 + idx * 0.08 }}
+                                className="mt-3 text-xs text-[#8fd4e6] group-hover:text-white transition flex items-center gap-1"
+                              >
+                                ➜ Click to view details
+                              </motion.p>
+                            </motion.button>
+                          ))}
+                        </div>
+                      </motion.div>
+                    ) : null
+                  )}
+              </AnimatePresence>
             </div>
 
             {/* Input Area */}
@@ -749,14 +875,15 @@ export default function AIAssistantWidget() {
                 >
                   {isListening ? <MicOff size={18} /> : <Mic size={18} />}
                 </button>
-                <button
-                  type="submit"
+                <StyledSubmitButton
+                  onClick={() => {
+                    const form = document.querySelector("form");
+                    if (form) form.dispatchEvent(new Event("submit", { bubbles: true }));
+                  }}
                   disabled={isLoading || !input.trim()}
-                  className="h-12 w-12 rounded-lg text-[#051320] grid place-items-center disabled:opacity-50 hover:brightness-110 transition flex-shrink-0"
-                  style={{ background: detectedMood && MOOD_THEMES[detectedMood] ? MOOD_THEMES[detectedMood].accent : DEFAULT_ACCENT }}
-                >
-                  <Send size={20} />
-                </button>
+                  title="Send message"
+                  icon={null}
+                />
               </div>
             </form>
           </motion.div>
@@ -764,15 +891,13 @@ export default function AIAssistantWidget() {
       </AnimatePresence>
 
       {/* Bot Button */}
-      <motion.button
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.96 }}
+      <GenerateButton
+        isOpen={isOpen}
         onClick={() => setIsOpen(!isOpen)}
-        className="h-16 w-16 rounded-full text-[#051320] grid place-items-center shadow-lg hover:shadow-xl transition-shadow"
-        style={{ background: detectedMood && MOOD_THEMES[detectedMood] ? MOOD_THEMES[detectedMood].accent : DEFAULT_ACCENT }}
-      >
-        {isOpen ? <X size={24} /> : (detectedMood && MOOD_THEMES[detectedMood] ? MOOD_THEMES[detectedMood].emoji : <Bot size={24} />)}
-      </motion.button>
-    </div>
+        detectedMood={detectedMood}
+        MOOD_THEMES={MOOD_THEMES}
+        DEFAULT_ACCENT={DEFAULT_ACCENT}
+      />
+    </motion.div>
   );
 }

@@ -9,7 +9,6 @@ import flightImg from "../../assets/flight.jpg";
 import trainImg from "../../assets/train.jpg";
 import busImg from "../../assets/bus.jpg";
 import MagicBento from "../../components/MagicBento";
-import AIAssistantWidget from "../../components/dashboard/AIAssistantWidget";
 
 const categories = ["Movies", "Hotels", "Flights", "Trains", "Buses"];
 const categoryImages = {
@@ -67,7 +66,7 @@ const Dashboard = () => {
             animate={{ opacity: 1, x: 0 }}
             className="max-w-4xl"
           >
-            <p className="text-brand-red font-bold tracking-widest uppercase mb-4 text-sm">Universal Booking</p>
+            <p className="text-brand-red font-bold tracking-widest uppercase mb-4 text-sm" style={{ fontFamily: "'Montserrat', sans-serif" }}>Universal Booking</p>
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter leading-[0.95] font-poppins">
               Welcome, {displayName}
             </h1>
@@ -112,8 +111,6 @@ const Dashboard = () => {
 
         <div className="absolute top-[20%] right-[10%] w-[500px] h-[500px] bg-brand-red/10 rounded-full blur-[150px] z-0 animate-pulse" />
       </main>
-
-      <AIAssistantWidget />
     </div>
   );
 };

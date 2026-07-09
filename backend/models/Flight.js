@@ -61,6 +61,11 @@ const flightSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    seatsAvailable: {
+      type: Number,
+      min: 0,
+      default: 180,
+    },
     description: {
       type: String,
       trim: true,

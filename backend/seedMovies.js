@@ -61,6 +61,24 @@ const sampleMovies = [
     storyline:
       "Two artists reconnect during monsoon season and discover the courage to perform their truth.",
   },
+  {
+    title: "Harbor Lights",
+    description:
+      "A suspenseful romance set along the coastline where two strangers uncover a hidden family secret.",
+    poster: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=800&q=80",
+    backgroundImage:
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80",
+    trailerUrl: "https://www.youtube.com/watch?v=9bZkp7q19f0",
+    genre: ["Romance", "Mystery", "Drama"],
+    duration: "2h 18m",
+    language: "English",
+    releaseYear: 2025,
+    cast: ["Nina Rao", "Arjun Malhotra", "Sana Qureshi"],
+    rating: 7.9,
+    location: "Goa",
+    storyline:
+      "When a coastal town prepares for its festival, two outsiders are pulled into a story that changes both of their lives.",
+  },
 ];
 
 async function seedMovies() {

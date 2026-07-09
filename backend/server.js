@@ -12,6 +12,7 @@ const app = express();
 // Middlewares
 app.use(cors());
 app.use(express.json());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Diagnostic routes
 app.get("/api/ping", (req, res) => res.json({ status: "ok", message: "API is reachable" }));

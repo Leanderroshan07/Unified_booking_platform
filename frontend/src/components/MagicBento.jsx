@@ -491,9 +491,12 @@ const MagicBento = ({
           }
         }
          
-        .card.active {
-           border-color: var(--purple-border);
-           box-shadow: 0 0 20px var(--purple-glow);
+        .card {
+          background: linear-gradient(135deg, rgba(10, 5, 20, 0.6) 0%, rgba(20, 10, 35, 0.5) 100%) !important;
+          backdrop-filter: blur(20px) !important;
+          -webkit-backdrop-filter: blur(20px) !important;
+          border: 1px solid rgba(${glowColor}, 0.2) !important;
+          transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
         }
         
         .card--border-glow::after {
@@ -521,7 +524,15 @@ const MagicBento = ({
         }
         
         .card--border-glow:hover {
-          box-shadow: 0 4px 20px rgba(46, 24, 78, 0.4), 0 0 30px rgba(${glowColor}, 0.2);
+          box-shadow: 0 8px 32px rgba(46, 24, 78, 0.6), 0 0 40px rgba(${glowColor}, 0.4), inset 0 0 20px rgba(${glowColor}, 0.1);
+          transform: translateY(-8px) scale(1.02);
+          background: rgba(10, 5, 20, 0.7);
+        }
+        
+        .card.active {
+          border-color: var(--purple-border) !important;
+          box-shadow: 0 8px 32px rgba(46, 24, 78, 0.6), 0 0 40px rgba(${glowColor}, 0.4), inset 0 0 20px rgba(${glowColor}, 0.1) !important;
+          background: linear-gradient(135deg, rgba(15, 8, 30, 0.8) 0%, rgba(25, 12, 40, 0.7) 100%) !important;
         }
         
         .particle::before {
@@ -587,14 +598,15 @@ const MagicBento = ({
                 <div className="card-responsive grid gap-4">
                     {items.map((card, index) => {
                         const isActive = activeItemIndex === index;
-                        const baseClassName = `card flex flex-col justify-center items-center relative min-h-[90px] lg:min-h-[100px] w-full max-w-full p-4 rounded-[16px] border border-solid font-light overflow-hidden transition-colors duration-300 ease-in-out cursor-pointer hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(0,0,0,0.15)] ${enableBorderGlow ? 'card--border-glow' : ''
+                        const baseClassName = `card flex flex-col justify-center items-center relative min-h-[90px] lg:min-h-[100px] w-full max-w-full p-4 rounded-[16px] border border-solid font-light overflow-hidden transition-all duration-300 ease-in-out cursor-pointer ${enableBorderGlow ? 'card--border-glow' : ''
                             } ${isActive ? 'active' : ''}`;
 
                         const cardStyle = {
-                            backgroundColor: card.color || 'rgba(6, 0, 16, 0.5)',
-                            borderColor: isActive ? `rgba(${glowColor}, 1)` : 'var(--border-color)',
+                            backgroundColor: card.color || 'rgba(10, 5, 20, 0.6)',
+                            borderColor: isActive ? `rgba(${glowColor}, 1)` : `rgba(${glowColor}, 0.2)`,
                             color: 'var(--white)',
-                            backdropFilter: 'blur(10px)',
+                            backdropFilter: 'blur(20px)',
+                            WebkitBackdropFilter: 'blur(20px)',
                             '--glow-x': '50%',
                             '--glow-y': '50%',
                             '--glow-intensity': '0',

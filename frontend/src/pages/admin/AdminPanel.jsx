@@ -1468,21 +1468,36 @@ const AdminPanel = () => {
 
                                         <div className="space-y-4 pt-2">
                                             <div className="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/10">
-                                                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Poster Image</span>
+                                                <div>
+                                                    <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Poster Image</span>
+                                                    <p className="mt-1 text-[11px] text-gray-500">Upload the main movie poster.</p>
+                                                    {movieFiles.poster && (
+                                                        <p className="mt-1 text-[11px] text-emerald-400">Selected: {movieFiles.poster.name}</p>
+                                                    )}
+                                                </div>
                                                 <label className="cursor-pointer bg-brand-red px-4 py-2 rounded-lg text-xs font-black hover:bg-red-600 transition-colors">
-                                                    CHOOSE <input type="file" name="poster" className="hidden" onChange={handleMovieFileChange} />
+                                                    CHOOSE <input type="file" name="poster" accept="image/*" className="hidden" onChange={handleMovieFileChange} />
                                                 </label>
                                             </div>
                                             <div className="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/10">
-                                                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Background</span>
+                                                <div>
+                                                    <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Background Image</span>
+                                                    <p className="mt-1 text-[11px] text-gray-500">Upload the hero or backdrop image.</p>
+                                                    {movieFiles.backgroundImage && (
+                                                        <p className="mt-1 text-[11px] text-emerald-400">Selected: {movieFiles.backgroundImage.name}</p>
+                                                    )}
+                                                </div>
                                                 <label className="cursor-pointer bg-brand-red px-4 py-2 rounded-lg text-xs font-black hover:bg-red-600 transition-colors">
-                                                    CHOOSE <input type="file" name="backgroundImage" className="hidden" onChange={handleMovieFileChange} />
+                                                    CHOOSE <input type="file" name="backgroundImage" accept="image/*" className="hidden" onChange={handleMovieFileChange} />
                                                 </label>
                                             </div>
                                             <div className="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/10">
                                                 <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Trailer Video</span>
+                                                {movieFiles.trailer && (
+                                                    <p className="mt-1 text-[11px] text-emerald-400">Selected: {movieFiles.trailer.name}</p>
+                                                )}
                                                 <label className="cursor-pointer bg-brand-red px-4 py-2 rounded-lg text-xs font-black hover:bg-red-600 transition-colors">
-                                                    CHOOSE <input type="file" name="trailer" className="hidden" onChange={handleMovieFileChange} />
+                                                    CHOOSE <input type="file" name="trailer" accept="video/*" className="hidden" onChange={handleMovieFileChange} />
                                                 </label>
                                             </div>
                                         </div>

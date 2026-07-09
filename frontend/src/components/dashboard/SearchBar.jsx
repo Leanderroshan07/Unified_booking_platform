@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, MapPin, Calendar, Hotel } from "lucide-react";
+import StyledSubmitButton from "./StyledSubmitButton";
 
 const SearchBar = ({ activeTab }) => {
   const [location, setLocation] = useState("");
@@ -71,13 +72,16 @@ const SearchBar = ({ activeTab }) => {
               className={baseInputClass}
             />
           </InputWrapper>
-          <button
-            type="submit"
-            className="bg-brand-red px-10 py-4 rounded-xl font-bold text-white shadow-[0_10px_20px_rgba(255,42,42,0.3)] hover:shadow-[0_10px_30px_rgba(255,42,42,0.5)] transition-all flex items-center justify-center gap-2 group transform active:scale-95"
-          >
-            <Search size={18} />
-            SEARCH MOVIES
-          </button>
+          <div className="flex justify-center">
+            <StyledSubmitButton
+              onClick={() => {
+                const form = document.querySelector("form");
+                if (form) form.dispatchEvent(new Event("submit", { bubbles: true }));
+              }}
+              title="Search Movies"
+              icon={Search}
+            />
+          </div>
         </div>
       )}
 
@@ -98,12 +102,16 @@ const SearchBar = ({ activeTab }) => {
           <InputWrapper icon={Calendar}>
             <input type="date" placeholder="Check-out" className={baseInputClass} />
           </InputWrapper>
-          <button
-            type="submit"
-            className="bg-brand-red px-8 py-4 rounded-xl font-bold text-white shadow-[0_10px_20px_rgba(255,42,42,0.3)] hover:bg-brand-red/90 transition-all font-serif uppercase tracking-widest"
-          >
-            SEARCH HOTELS
-          </button>
+          <div className="flex justify-center">
+            <StyledSubmitButton
+              onClick={() => {
+                const form = document.querySelector("form");
+                if (form) form.dispatchEvent(new Event("submit", { bubbles: true }));
+              }}
+              title="Search Hotels"
+              icon={Hotel}
+            />
+          </div>
         </div>
       )}
 
@@ -136,9 +144,16 @@ const SearchBar = ({ activeTab }) => {
               name="date"
             />
           </InputWrapper>
-          <button type="submit" className="bg-brand-red px-8 py-4 rounded-xl font-bold text-white transition-all uppercase">
-            SEARCH FLIGHTS
-          </button>
+          <div className="flex justify-center">
+            <StyledSubmitButton
+              onClick={() => {
+                const form = document.querySelector("form");
+                if (form) form.dispatchEvent(new Event("submit", { bubbles: true }));
+              }}
+              title="Search Flights"
+              icon={Search}
+            />
+          </div>
         </div>
       )}
 
@@ -171,9 +186,16 @@ const SearchBar = ({ activeTab }) => {
               name="date"
             />
           </InputWrapper>
-          <button type="submit" className="bg-brand-red px-8 py-4 rounded-xl font-bold text-white transition-all uppercase">
-            SEARCH {activeTab}
-          </button>
+          <div className="flex justify-center">
+            <StyledSubmitButton
+              onClick={() => {
+                const form = document.querySelector("form");
+                if (form) form.dispatchEvent(new Event("submit", { bubbles: true }));
+              }}
+              title={`Search ${activeTab}`}
+              icon={Search}
+            />
+          </div>
         </div>
       )}
     </form>
