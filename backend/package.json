@@ -7,8 +7,7 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "db:clear": "node clearDatabase.js",
-    "db:status": "node dataMgmt.js status",
-    "seed:dummy": "node seedDummyData.js"
+    "db:status": "node dataMgmt.js status"
   },
   "keywords": [],
   "author": "",

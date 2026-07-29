@@ -2,7 +2,6 @@
   "scripts": {
     "start": "node server.js",
     "dev:backend": "npm --prefix backend run dev",
-    "dev:frontend": "npm --prefix frontend run dev",
-    "seed:dummy": "npm --prefix backend run seed:dummy"
+    "dev:frontend": "npm --prefix frontend run dev"
   }
 }

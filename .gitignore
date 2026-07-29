@@ -6,6 +6,9 @@ frontend/node_modules/
 # Environment files
 .env
 .env.*
+!.env.example
+!backend/.env.example
+!frontend/.env.example
 backend/.env
 frontend/.env
 
@@ -17,6 +20,10 @@ yarn-error.log*
 # Build artifacts
 frontend/dist/
 backend/uploads/
+
+# Documentation (keep locally, not on GitHub)
+SYSTEM_OVERVIEW.md
+UNIQUE_FEATURES.md
 
 # OS / editor
 .DS_Store
